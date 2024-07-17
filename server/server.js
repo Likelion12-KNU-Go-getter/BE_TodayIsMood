@@ -1,30 +1,35 @@
-// server/server.js
-
+// Express 모듈을 가져옵니다.
 const express = require('express');
-const bodyParser = require('body-parser');
-const sequelize = require('./config/database');
-const authRoutes = require('./routes/authRoutes');
-const diaryRoutes = require('./routes/diaryRoutes');
-const authMiddleware = require('./middlewares/auth');
-
-// Express 앱 생성
+// Express 애플리케이션을 생성합니다.
 const app = express();
 
-// JSON 요청 바디 파싱 미들웨어 추가
-app.use(bodyParser.json());
+// Sequelize 설정 파일을 가져옵니다.
+const sequelize = require('./config/database');
+// 사용자 관련 라우트를 가져옵니다.
+const userRoutes = require('./routes/userRoute')
+// 일기 관련 라우트를 가져옵니다.
+const diaryRoutes = require('./routes/diaryRoute');
 
-// 인증 관련 라우트 추가
-app.use('/api', authRoutes);
-// 다이어리 관련 라우트 추가 (인증 미들웨어 포함)
-app.use('/api/diaries', authMiddleware, diaryRoutes);
+// 환경 변수를 설정하기 위해 dotenv 모듈을 가져옵니다.
+require('dotenv').config();
 
-// 데이터베이스와 동기화 후 서버 시작
-sequelize.sync()
-    .then(() => {
-        app.listen(5000, () => {
-            console.log('Server running on port 5000');
-        });
-    })
-    .catch(err => {
-        console.error('Unable to connect to the database:', err);
+// 요청 본문을 JSON 형식으로 파싱하는 미들웨어를 사용합니다.
+app.use(express.json());
+
+// '/api' 경로로 들어오는 요청을 userRoutes에서 처리합니다.
+app.use('/api', userRoutes);
+
+// '/api' 경로로 들어오는 요청을 diaryRoutes에서 처리합니다.
+app.use('/api', diaryRoutes);
+
+// 데이터베이스를 동기화하고 서버를 시작합니다.
+sequelize.sync().then(() => {
+    // 서버가 3000번 포트에서 실행되도록 합니다.
+    app.listen(3000, () => {
+        // 서버가 성공적으로 시작되었음을 콘솔에 출력합니다.
+        console.log('Server is running on port 3000');
     });
+// 데이터베이스 동기화 중 에러가 발생하면 콘솔에 출력합니다.
+}).catch(err => {
+    console.log('Error: ', err);
+});
