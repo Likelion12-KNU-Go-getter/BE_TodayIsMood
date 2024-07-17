@@ -1,3 +1,9 @@
+// Express 모듈을 가져옵니다.
+const express = require('express');
+
+// Router 인스턴스를 생성합니다.
+const router = express.Router();
+
 // bcrypt 모듈을 가져옵니다.
 const bcrypt = require('bcrypt');
 
@@ -7,8 +13,8 @@ const jwt = require('jsonwebtoken');
 // User 모델을 가져옵니다.
 const User = require('../models/User');
 
-// 회원가입 함수
-exports.signup = async (req, res) => {
+// 회원가입 라우트 핸들러를 정의합니다.
+router.post('/signup', async (req, res) => {
     // 요청 본문에서 username과 password를 가져옵니다.
     const { username, password } = req.body;
     try {
@@ -23,10 +29,10 @@ exports.signup = async (req, res) => {
         console.log(err);
         res.status(500).json({ error: 'Something went wrong' });
     }
-};
+});
 
-// 로그인 함수
-exports.login = async (req, res) => {
+// 로그인 라우트 핸들러를 정의합니다.
+router.post('/login', async (req, res) => {
     // 요청 본문에서 username과 password를 가져옵니다.
     const { username, password } = req.body;
     try {
@@ -51,4 +57,7 @@ exports.login = async (req, res) => {
         console.log(err);
         res.status(500).json({ error: 'Something went wrong' });
     }
-};
+});
+
+// 라우터를 내보냅니다.
+module.exports = router;

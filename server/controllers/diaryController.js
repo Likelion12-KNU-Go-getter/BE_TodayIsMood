@@ -1,66 +1,42 @@
-// server/controllers/diaryController.js
-
+// Diary 모델을 가져옵니다.
 const Diary = require('../models/Diary');
 
-// 그림일기 작성 처리 함수
+// 일기 생성 함수
 exports.createDiary = async (req, res) => {
+    // 요청 본문에서 title과 imageUrl을 가져옵니다.
+    const { title, imageUrl } = req.body;
     try {
-        const { title, image, date } = req.body;
-        const diary = await Diary.create({ title, image, date, userId: req.user.id }); // 다이어리 생성
-        res.status(201).json({ message: 'Diary created successfully', diary });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+        // 새로운 일기를 생성합니다.
+        const diary = await Diary.create({ title, imageUrl, userId: req.userId });
+        // 생성된 일기의 정보를 응답으로 보냅니다.
+        res.status(201).json(diary);
+    } catch (err) {
+        // 에러가 발생하면 콘솔에 출력하고 500 상태 코드로 응답합니다.
+        console.log(err);
+        res.status(500).json({ error: 'Something went wrong' });
     }
 };
 
-// 그림일기 조회 처리 함수
-exports.getDiaries = async (req, res) => {
+// 월별 일기 조회 함수
+exports.getDiariesByMonth = async (req, res) => {
+    // 요청 쿼리에서 month를 가져옵니다.
+    const { month } = req.query;
     try {
-        const diaries = await Diary.findAll({ where: { userId: req.user.id } }); // 다이어리 검색
-        res.status(200).json(diaries);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// 특정 그림일기 조회 처리 함수
-exports.getDiaryById = async (req, res) => {
-    try {
-        const diary = await Diary.findOne({ where: { id: req.params.id, userId: req.user.id } }); // 특정 다이어리 검색
-        if (!diary) {
-            return res.status(404).json({ message: 'Diary not found' });
-        }
-        res.status(200).json(diary);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// 그림일기 수정 처리 함수
-exports.updateDiary = async (req, res) => {
-    try {
-        const { title, image, date } = req.body;
-        const diary = await Diary.findOne({ where: { id: req.params.id, userId: req.user.id } });
-        if (!diary) {
-            return res.status(404).json({ message: 'Diary not found' });
-        }
-        await diary.update({ title, image, date }); // 다이어리 업데이트
-        res.status(200).json({ message: 'Diary updated successfully', diary });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-// 그림일기 삭제 처리 함수
-exports.deleteDiary = async (req, res) => {
-    try {
-        const diary = await Diary.findOne({ where: { id: req.params.id, userId: req.user.id } });
-        if (!diary) {
-            return res.status(404).json({ message: 'Diary not found' });
-        }
-        await diary.destroy(); // 다이어리 삭제
-        res.status(200).json({ message: 'Diary deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        // 주어진 월에 해당하는 일기를 찾습니다.
+        const diaries = await Diary.findAll({
+            where: {
+                userId: req.userId,
+                createdAt: {
+                    [Op.gte]: new Date(`${month}-01`),
+                    [Op.lt]: new Date(`${month}-01`).setMonth(new Date(`${month}-01`).getMonth() + 1)
+                }
+            }
+        });
+        // 찾은 일기들을 응답으로 보냅니다.
+        res.json(diaries);
+    } catch (err) {
+        // 에러가 발생하면 콘솔에 출력하고 500 상태 코드로 응답합니다.
+        console.log(err);
+        res.status(500).json({ error: 'Something went wrong' });
     }
 };
