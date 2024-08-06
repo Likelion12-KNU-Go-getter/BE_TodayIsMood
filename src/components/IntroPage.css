@@ -1,0 +1,99 @@
+.intro {
+  background: #efebe2; /* 기본 배경색 */
+  position: relative; /* 위치 설정 */
+  width: 100vw; /* 화면 전체 너비로 설정 */
+  height: 100vh; /* 화면 전체 높이로 설정 */
+  display: flex;
+  flex-direction: column; /* 제목과 버튼들을 세로로 나열 */
+  justify-content: center; /* 세로 방향으로 중앙 정렬 */
+  align-items: center; /* 가로 방향으로 중앙 정렬 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  margin: 0; /* 기본 마진 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+}
+
+
+.title {
+  font-size: 80px; /* 제목 크기 */
+  color: #15a536; /* 제목 색상 */
+  margin-bottom: 20px; /* 제목과 버튼 사이 여백 */
+  z-index: 1;
+}
+
+.btn-container {
+  display: flex; /* flexbox 사용 */
+  flex-direction: column; /* 버튼들을 세로로 나열 */
+  align-items: center; /* 버튼들을 가로 방향으로 중앙 정렬 */
+  margin-top: 10px; /* 버튼과 제목 사이 여백 */
+}
+
+.intro-btn {
+  position: relative;
+  z-index: 2;
+  background-color: #e3e4e6;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  color: #000000; /* 글씨 색상을 검정색으로 설정 */
+  font-weight: 700; 
+}
+
+.intro-btn:hover {
+  background-color: #d0d1d6;
+}
+
+.shapes-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}  
+
+.shape1 {
+  position: absolute;
+  width: 330px; /* 이미지 너비 조정 */
+  height: 230px; /* 이미지 높이 조정 */
+  top: 340px; /* 조정 필요 */
+  left: 320px; /* 조정 필요 */
+  z-index: 0;
+}
+
+.shape2 {
+  position: absolute;
+  width: 330px; /* 이미지 너비 조정 */
+  height: 230px; /* 이미지 높이 조정 */
+  top: 80px; /* 조정 필요 */
+  left: 360px; /* 조정 필요 */
+  z-index: 0;
+}
+
+.shape3 {
+  position: absolute;
+  width: 330px; /* 이미지 너비 조정 */
+  height: 230px; /* 이미지 높이 조정 */
+  top: 280px; /* 조정 필요 */
+  left: 780px; /* 조정 필요 */
+  z-index: 0;
+}
+
+.shape1 img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain;
+}
+
+.shape2 img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain;
+}
+
+.shape3 img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+}
